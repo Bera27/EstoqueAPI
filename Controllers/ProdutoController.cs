@@ -1,4 +1,5 @@
 using EstoqueAPI.Data;
+using EstoqueAPI.Extension;
 using EstoqueAPI.Models;
 using EstoqueAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,18 @@ namespace EstoqueAPI.Controllers
         public async Task<IActionResult> GetAsync(
             [FromServices] EstoqueDataContext context)
         {
-            var produtos = await context.Produtos.ToListAsync();
-            return Ok(produtos);
+            try
+            {
+                var produtos = await context.Produtos
+                                .AsNoTracking()
+                                .ToListAsync();
+
+                return Ok(new ResultViewModel<List<Produto>>(produtos));
+            }
+            catch
+            {
+                return StatusCode(500, new ResultViewModel<List<Produto>>("PCG10 - Falha interna no servidor"));
+            }
         }
 
         [HttpGet("produtos/{id:int}")]
@@ -23,12 +34,21 @@ namespace EstoqueAPI.Controllers
             [FromServices] EstoqueDataContext context,
             [FromRoute] int id)
         {
-            var produto = await context.Produtos.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var produto = await context.Produtos
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (produto == null)
-                return NotFound();
+                if (produto == null)
+                    return NotFound(new ResultViewModel<Produto>("Produto não encontrado"));
 
-            return Ok(produto);
+                return Ok(new ResultViewModel<Produto>(produto));
+            }
+            catch
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("PCG21 - Falha interna no servidor"));
+            }
         }
 
         [HttpPost("produtos")]
@@ -37,7 +57,7 @@ namespace EstoqueAPI.Controllers
             [FromBody] EditorProdutoViewModel model)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(new ResultViewModel<Produto>(ModelState.GetErros()));
 
             try
             {
@@ -55,15 +75,15 @@ namespace EstoqueAPI.Controllers
                 await context.Produtos.AddAsync(produto);
                 await context.SaveChangesAsync();
 
-                return Created($"v1/produtos/{produto.Id}", produto);
+                return Created($"v1/produtos/{produto.Id}", new ResultViewModel<Produto>(produto));
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, "Erro: PCP10 - Não foi possível incluir a categoria");
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP30 - Não foi possível incluir o produto"));
             }
-            catch(Exception)
+            catch
             {
-                return StatusCode(500, "Erro: PCP11 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP31 - Falha interna no servidor"));
             }
         }
 
@@ -74,24 +94,33 @@ namespace EstoqueAPI.Controllers
             [FromRoute] int id)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(new ResultViewModel<Produto>(ModelState.GetErros()));
 
-            var produto = await context.Produtos.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var produto = await context.Produtos
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (produto == null)
-                return NotFound();
+                if (produto == null)
+                    return NotFound(new ResultViewModel<Produto>("Produto não encontrado"));
 
-            produto.Nome = model.Nome;
-            produto.Descricao = model.Descricao;
-            produto.Quantidade = model.Quantidade;
-            produto.PrecoCompra = model.PrecoCompra;
-            produto.PrecoVenda = model.PrecoVenda;
-            produto.CompradoEm = model.CompradoEm;
+                produto.Nome = model.Nome;
+                produto.Descricao = model.Descricao;
+                produto.Quantidade = model.Quantidade;
+                produto.PrecoCompra = model.PrecoCompra;
+                produto.PrecoVenda = model.PrecoVenda;
+                produto.CompradoEm = model.CompradoEm;
 
-            context.Produtos.Update(produto);
-            await context.SaveChangesAsync();
+                context.Produtos.Update(produto);
+                await context.SaveChangesAsync();
 
-            return Ok(model);
+                return Ok(new ResultViewModel<Produto>(produto));
+            }
+            catch
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP40 - Falha interna no servidor"));
+            }
         }
 
         [HttpDelete("produtos/{id:int}")]
@@ -99,15 +128,28 @@ namespace EstoqueAPI.Controllers
             [FromServices] EstoqueDataContext context,
             [FromRoute] int id)
         {
-            var produto = await context.Produtos.FirstOrDefaultAsync(x => x.Id == id);
+            try
+            {
+                var produto = await context.Produtos
+                                    .AsNoTracking()
+                                    .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (produto == null)
-                return NotFound();
+                if (produto == null)
+                    return NotFound(new ResultViewModel<Produto>("Produto não encontrado"));
 
-            context.Produtos.Remove(produto);
-            await context.SaveChangesAsync();
+                context.Produtos.Remove(produto);
+                await context.SaveChangesAsync();
 
-            return Ok(produto);
+                return Ok(produto);
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCD50 - Não foi possível incluir o produto"));
+            }
+            catch
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCD51 - Falha interna no servidor"));
+            }
         }
         
     }
