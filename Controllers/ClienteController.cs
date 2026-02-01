@@ -75,7 +75,7 @@ namespace EstoqueAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: CC20 - Não foi possível incluir o produto"));
+                return StatusCode(500, new ResultViewModel<Cliente>("Erro: CC20 - Não foi possível incluir o cliente"));
             }
             catch
             {
