@@ -140,7 +140,7 @@ namespace EstoqueAPI.Controllers
                 context.Produtos.Remove(produto);
                 await context.SaveChangesAsync();
 
-                return Ok(produto);
+                return Ok(new ResultViewModel<Produto>(produto));
             }
             catch (DbUpdateException)
             {
