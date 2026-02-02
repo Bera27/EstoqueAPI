@@ -25,7 +25,7 @@ namespace EstoqueAPI.Controllers
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("CC10 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>("FC10 - Falha interna no servidor"));
             }
         }
 
@@ -47,7 +47,7 @@ namespace EstoqueAPI.Controllers
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("CC11 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>("FC11 - Falha interna no servidor"));
             }
         }
 
@@ -73,14 +73,13 @@ namespace EstoqueAPI.Controllers
 
                 return Created($"v1/funcionarios/{funcionario.Id}", new ResultViewModel<Funcionario>(funcionario));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                var baseEx = ex.GetBaseException();
-                return BadRequest(new { error = baseEx.Message, stack = baseEx.StackTrace });
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: VC30 - Não foi possível incluir o funcionario"));
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("CC21 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>("FC21 - Falha interna no servidor"));
             }
         }
 
@@ -108,9 +107,13 @@ namespace EstoqueAPI.Controllers
 
                 return Ok(new ResultViewModel<Funcionario>(funcionario));
             }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: VC30 - Não foi possível atualizar o funcionario"));
+            }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("CC30 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>("FC31 - Falha interna no servidor"));
             }
         }
 
@@ -133,9 +136,13 @@ namespace EstoqueAPI.Controllers
 
                 return Ok(new ResultViewModel<Funcionario>(funcionario));
             }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: VC40 - Não foi possível excluir o funcionario"));
+            }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("CC40 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>("FC41 - Falha interna no servidor"));
             }
         }
     }
