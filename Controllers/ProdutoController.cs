@@ -117,6 +117,10 @@ namespace EstoqueAPI.Controllers
 
                 return Ok(new ResultViewModel<Produto>(produto));
             }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCD50 - Não foi possível atualizar o produto"));
+            }
             catch
             {
                 return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP40 - Falha interna no servidor"));
@@ -144,7 +148,7 @@ namespace EstoqueAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCD50 - Não foi possível incluir o produto"));
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCD50 - Não foi possível excluir o produto"));
             }
             catch
             {

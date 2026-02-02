@@ -138,6 +138,7 @@ C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.AssemblyInfoInputs.cache
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.AssemblyInfo.cs
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.csproj.CoreCompileInputs.cache
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.sourcelink.json
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -153,4 +154,3 @@ C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\refint\EstoqueAPI.dll
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.pdb
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.genruntimeconfig.cache
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\ref\EstoqueAPI.dll
-C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.sourcelink.json

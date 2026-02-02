@@ -1,12 +1,16 @@
+using System.Text.Json.Serialization;
 using EstoqueAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
-                .ConfigureApiBehaviorOptions(options =>
+                .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
+                .AddJsonOptions(x =>
                 {
-                    options.SuppressModelStateInvalidFilter = true;
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
                 });
+
                 
 builder.Services.AddDbContext<EstoqueDataContext>();
 
