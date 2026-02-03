@@ -10,6 +10,7 @@ namespace EstoqueAPI.Models
         public int Id { get; set; }
         public int IdFuncionario { get; set; }
         public Funcionario Funcionario { get; set; }
+
         public DateTime DataVenda { get; set; }
         public decimal VendaTotal { get; set; }
 

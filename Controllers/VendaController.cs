@@ -69,26 +69,55 @@ namespace EstoqueAPI.Controllers
             if (!ModelState.IsValid)
                 BadRequest(new ResultViewModel<Venda>(ModelState.GetErros()));
 
+            using var transaction = await context.Database.BeginTransactionAsync();
+
             try
             {
                 var venda = new Venda
                 {
                     IdFuncionario = model.IdFuncionario,
-                    VendaTotal = model.VendaTotal
+                    VendaTotal = 0, // Vai ser calculado abaixo
+                    Itens = new List<VendaItem>()
                 };
 
+                decimal totalVenda = 0;
+
+                foreach (var itemInput in model.Itens)
+                {
+                    var produto = await context.Produtos.FindAsync(itemInput.IdProduto);
+                    if (produto == null)
+                        return BadRequest(new ResultViewModel<string>($"Produto ID {itemInput.IdProduto} não encontrado."));
+
+                    if (produto.Quantidade < itemInput.Quantidade)
+                        return BadRequest(new ResultViewModel<string>($"Estoque insuficiente para o produto: {produto.Nome}."));
+
+                    var vendaItem = new VendaItem
+                    {
+                        Produto = produto,
+                        Quantidade = itemInput.Quantidade,
+                        PrecoUN = produto.PrecoVenda
+                    };
+
+                    produto.Quantidade -= itemInput.Quantidade;
+                    totalVenda += (produto.PrecoVenda * itemInput.Quantidade);
+
+                    venda.Itens.Add(vendaItem);
+
+                    context.Produtos.Update(produto);
+                }
+
+                venda.VendaTotal = totalVenda;
                 await context.Vendas.AddAsync(venda);
                 await context.SaveChangesAsync();
 
+                await transaction.CommitAsync();
+
                 return Created($"v1/vendas{venda.Id}", new ResultViewModel<Venda>(venda));
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: VC30 - Não foi possível incluir a venda"));
-            }
-            catch
-            {
-                return StatusCode(500, new ResultViewModel<Endereco>("VC31 - Falha interna no servidor"));
+                await transaction.RollbackAsync(); // Desfaz tudo se der erro
+                return StatusCode(500, new ResultViewModel<string>("Erro ao processar a venda: " + ex.Message));
             }
         }
 
@@ -111,7 +140,6 @@ namespace EstoqueAPI.Controllers
                     return NotFound(new ResultViewModel<Venda>("venda não encontrada"));
 
                 venda.IdFuncionario = model.IdFuncionario;
-                venda.VendaTotal = model.VendaTotal;
 
                 context.Vendas.Update(venda);
                 await context.SaveChangesAsync();
