@@ -92,7 +92,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var funcionario = context.Funcionarios
-                                    .AsNoTracking()
                                     .FirstOrDefault(x => x.Id == id);
 
                 if (funcionario == null)
@@ -125,7 +124,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var funcionario = context.Funcionarios
-                                    .AsNoTracking()
                                     .FirstOrDefault(x => x.Id == id);
 
                 if (funcionario == null)

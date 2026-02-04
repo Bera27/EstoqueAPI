@@ -92,7 +92,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var cliente = context.Clientes
-                                    .AsNoTracking()
                                     .FirstOrDefault(x => x.Id == id);
 
                 if (cliente == null)
@@ -121,7 +120,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var cliente = context.Clientes
-                                    .AsNoTracking()
                                     .FirstOrDefault(x => x.Id == id);
 
                 if (cliente == null)

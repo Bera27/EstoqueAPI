@@ -5,10 +5,10 @@ namespace EstoqueAPI.ViewModels
     public class EditorProdutoViewModel
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
-        public string Nome { get; set; }
+        public string Nome { get; set; } = null!;
 
         [Required(ErrorMessage = "A descrição é obrigatório")]
-        public string Descricao { get; set; }
+        public string Descricao { get; set; } = null!;
 
         [Required(ErrorMessage = "A quantidade é obrigatório")]
         public int Quantidade { get; set; }

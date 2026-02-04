@@ -17,7 +17,7 @@ namespace EstoqueAPI.ViewModels
         public ResultViewModel(string error)
             => Errors.Add(error);
 
-        public T Data { get; private set; }
-        public List<string> Errors { get; private set; } = new();
+        public T? Data { get; private set; }
+        public List<string> Errors { get; private set; } = [];
     }
 }

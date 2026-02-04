@@ -36,7 +36,7 @@ namespace EstoqueAPI.Controllers
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<List<Endereco>>("EC10 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<List<Endereco>>("EDC10 - Falha interna no servidor"));
             }
         }
 
@@ -68,7 +68,7 @@ namespace EstoqueAPI.Controllers
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<List<Endereco>>("EC20 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<List<Endereco>>("EDC20 - Falha interna no servidor"));
             }
         }
 
@@ -97,11 +97,11 @@ namespace EstoqueAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP30 - Não foi possível incluir o endereço"));
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: EDC30 - Não foi possível incluir o endereço"));
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Endereco>("EC20 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Endereco>("EDC31 - Falha interna no servidor"));
             }
         }
 
@@ -135,11 +135,11 @@ namespace EstoqueAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP30 - Não foi possível atualizar o endereço"));
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: EDC40 - Não foi possível atualizar o endereço"));
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Endereco>("EC20 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Endereco>("EDC41 - Falha interna no servidor"));
             }
         }
 
@@ -164,11 +164,11 @@ namespace EstoqueAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: PCP30 - Não foi possível excluir o endereço"));
+                return StatusCode(500, new ResultViewModel<Produto>("Erro: EDC50 - Não foi possível excluir o endereço"));
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Endereco>("EC20 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Endereco>("EDC51 - Falha interna no servidor"));
             }
         }
     }

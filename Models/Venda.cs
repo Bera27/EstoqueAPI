@@ -9,11 +9,11 @@ namespace EstoqueAPI.Models
     {
         public int Id { get; set; }
         public int IdFuncionario { get; set; }
-        public Funcionario Funcionario { get; set; }
+        public Funcionario Funcionario { get; set; } = null!;
 
         public DateTime DataVenda { get; set; }
         public decimal VendaTotal { get; set; }
 
-        public ICollection<VendaItem> Itens { get; set; } = new List<VendaItem>();
+        public ICollection<VendaItem> Itens { get; set; } = [];
     }
 }

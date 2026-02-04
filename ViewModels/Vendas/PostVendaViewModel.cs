@@ -8,7 +8,7 @@ namespace EstoqueAPI.ViewModels.Vendas
     public class PostVendaViewModel
     {
         public int IdFuncionario { get; set; }
-        public List<ItemPedidoInput> Itens { get; set; }
+        public List<ItemPedidoInput> Itens { get; set; } = [];
     }
 
     public class ItemPedidoInput

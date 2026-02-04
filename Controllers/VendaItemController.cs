@@ -69,7 +69,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var vendaItem = await context.VendaItems
-                                    .AsNoTracking()
                                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (vendaItem == null)
@@ -103,7 +102,6 @@ namespace EstoqueAPI.Controllers
             try
             {
                 var vendaItem = await context.VendaItems
-                                    .AsNoTracking()
                                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (vendaItem == null)
