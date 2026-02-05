@@ -17,6 +17,10 @@ namespace EstoqueAPI.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(x => x.Senha)
+                .IsRequired()
+                .HasMaxLength(64);
+
             builder.Property(x => x.Telefone)
                 .IsRequired()
                 .HasColumnType("NVARCHAR")
