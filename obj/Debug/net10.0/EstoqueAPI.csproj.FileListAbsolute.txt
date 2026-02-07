@@ -154,3 +154,5 @@ C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\refint\EstoqueAPI.dll
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.pdb
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\EstoqueAPI.genruntimeconfig.cache
 C:\ProjetosC\EstoqueAPI\obj\Debug\net10.0\ref\EstoqueAPI.dll
+C:\ProjetosC\EstoqueAPI\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\ProjetosC\EstoqueAPI\bin\Debug\net10.0\SecureIdentity.dll

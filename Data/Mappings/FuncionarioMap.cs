@@ -19,7 +19,7 @@ namespace EstoqueAPI.Data.Mappings
 
             builder.Property(x => x.Senha)
                 .IsRequired()
-                .HasMaxLength(64);
+                .HasMaxLength(256);
 
             builder.Property(x => x.Telefone)
                 .IsRequired()

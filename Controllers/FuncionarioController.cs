@@ -1,9 +1,12 @@
 using EstoqueAPI.Data;
 using EstoqueAPI.Extension;
+using EstoqueAPI.Migrations;
 using EstoqueAPI.Models;
 using EstoqueAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SecureIdentity.Password;
 
 namespace EstoqueAPI.Controllers
 {
@@ -12,6 +15,7 @@ namespace EstoqueAPI.Controllers
     public class FuncionarioController : ControllerBase
     {
         [HttpGet("funcionarios")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAsync(
             [FromServices] EstoqueDataContext context)
         {
@@ -19,9 +23,16 @@ namespace EstoqueAPI.Controllers
             {
                 var funcionario = await context.Funcionarios
                                     .AsNoTracking()
+                                    .Select(x => new
+                                    {
+                                        x.Id,
+                                        x.Nome,
+                                        x.Telefone,
+                                        x.Cargo
+                                    })
                                     .ToListAsync();
 
-                return Ok(new ResultViewModel<List<Funcionario>>(funcionario));
+                return Ok(new ResultViewModel<dynamic>(funcionario));
             }
             catch
             {
@@ -30,6 +41,7 @@ namespace EstoqueAPI.Controllers
         }
 
         [HttpGet("funcionarios/{id:int}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync
         (   [FromServices] EstoqueDataContext context,
             [FromRoute] int id)
@@ -38,12 +50,19 @@ namespace EstoqueAPI.Controllers
             {
                 var funcionario = await context.Funcionarios
                                         .AsNoTracking()
+                                        .Select(x => new
+                                        {
+                                            x.Id,
+                                            x.Nome,
+                                            x.Telefone,
+                                            x.Cargo
+                                        })
                                         .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (funcionario == null)
                     return NotFound(new ResultViewModel<Funcionario>("Funcionario não encontrado"));
 
-                return Ok(new ResultViewModel<Funcionario>(funcionario));
+                return Ok(new ResultViewModel<dynamic>(funcionario));
             }
             catch
             {
@@ -65,21 +84,30 @@ namespace EstoqueAPI.Controllers
                 {
                     Nome = model.Nome,
                     Telefone = model.Telefone,
-                    Cargo = model.Cargo
+                    Cargo = model.Cargo,
+                    Senha = model.Senha
                 };
+
+                funcionario.Senha = PasswordHasher.Hash(funcionario.Senha);
 
                 await context.Funcionarios.AddAsync(funcionario);
                 await context.SaveChangesAsync();
 
-                return Created($"v1/funcionarios/{funcionario.Id}", new ResultViewModel<Funcionario>(funcionario));
+                return Ok(new ResultViewModel<dynamic>(new
+                {
+                    funcionario = funcionario.Nome,
+                    funcionario.Senha
+                }));
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                return StatusCode(500, new ResultViewModel<Produto>("Erro: VC30 - Não foi possível incluir o funcionario"));
+                var baseEx = ex.GetBaseException();
+                return BadRequest(new { error = baseEx.Message, stack = baseEx.StackTrace });
+                //return StatusCode(500, new ResultViewModel<Produto>("Erro: VC30 - Não foi possível incluir o funcionario"));
             }
             catch
             {
-                return StatusCode(500, new ResultViewModel<Funcionario>("FC21 - Falha interna no servidor"));
+                return StatusCode(500, new ResultViewModel<Funcionario>($"FC21 - Falha interna no servidor"));
             }
         }
 
@@ -117,6 +145,7 @@ namespace EstoqueAPI.Controllers
         }
 
         [HttpDelete("funcionarios/{id:int}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteAsync
         ([FromServices] EstoqueDataContext context,
          [FromRoute] int id)

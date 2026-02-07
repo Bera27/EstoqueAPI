@@ -14,7 +14,7 @@ namespace EstoqueAPI.ViewModels
         public string Telefone { get; set; } = null!;
 
         [Required(ErrorMessage = "Senha é obrigatório")]
-        [StringLength(64, MinimumLength = 6, ErrorMessage = "A senha deve ter entre 6 a 64 caracteres")]
+        [MinLength(6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres")]
         public string Senha { get; set; } = null!;
     }
 }

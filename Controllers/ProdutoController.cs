@@ -2,6 +2,7 @@ using EstoqueAPI.Data;
 using EstoqueAPI.Extension;
 using EstoqueAPI.Models;
 using EstoqueAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace EstoqueAPI.Controllers
 {
     [ApiController]
     [Route("v1")]
+    [Authorize(Roles = "admin, estoquista")]
     public class ProdutoController : Controller
     {
         [HttpGet("produtos")]

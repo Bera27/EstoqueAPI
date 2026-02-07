@@ -3,6 +3,7 @@ using EstoqueAPI.Extension;
 using EstoqueAPI.Models;
 using EstoqueAPI.ViewModels;
 using EstoqueAPI.ViewModels.Enderecos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace EstoqueAPI.Controllers
 {
     [ApiController]
     [Route("v1")]
+    [Authorize(Roles = "admin, atendente")]
     public class EnderecoController : ControllerBase
     {
         [HttpGet("enderecos")]
